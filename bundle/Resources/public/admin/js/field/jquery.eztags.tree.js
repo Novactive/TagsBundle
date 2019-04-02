@@ -1,39 +1,55 @@
-/*global $*/
-
 (function() {
     'use strict';
 
-    // jstree setup
-    function TreeView(el){
+    var $ = jQuery;
+
+    /* options for tagsTree plugin
+        'modal' - boolean - is the tagsTree opened in modal window (default false)
+        'treeClassName' - string - class name for div on which jstree is initialized (default 'tags-tree')
+        'modalClassName' - string - class name for modal div in which tagsTree are opened (default 'ng-modal')
+    */
+    var TagsTree = function(el, options){
+        this.settings = $.extend({
+            'treeClassName': 'tags-tree',
+        }, options);
+
+
         this.$el = $(el);
+        this.$tree = this.$el.find('.' + this.settings.treeClassName);
         this.rootNodeAdded = false;
-        this.rootNode = {};
+        this.hideRoot = this.$tree.data('hide-root-tag');
+        this.rootTagId = this.$tree.data('root-tag-id');
+        this.path = this.$tree.data('path');
+
         this.getSetupData();
     };
 
-    TreeView.prototype.getSetupData = function(){
-        $.getJSON(this.$el.data('config-url') + '?ContentType=json', function(data) {
-            this.rootNode = data.content.config.rootTag;
-            this.hideRoot = data.content.config.hideRootTag;
-            this.initialiseTree();
+    TagsTree.prototype.getSetupData = function(){
+
+        var route = this.path
+            .replace("_tagId_", this.rootTagId + "/true");
+
+        $.getJSON(route + '?ContentType=json', function(data) {
+            this.rootNode = data[0];
+            this.treeInit();
         }.bind(this));
     };
 
-    TreeView.prototype.getTreeData = function(node, cb){
+    TagsTree.prototype.getTreeData = function(node, cb){
         if(this.rootNodeAdded || this.hideRoot){
             var tagId = node.id == '#' ? this.rootNode.id : node.id;
-            $.getJSON(this.$el.data('base-url') + tagId + '?ContentType=json', function(data) {
-                var children = data.content.children;
-                var selected = this.tags.tags.items;
+
+            var route = this.path
+                .replace('_tagId_', tagId)
+                .replace('#', this.rootTagId + '/true');
+
+
+            $.getJSON(route + '?ContentType=json', function(data) {
+                var children = data;
                 for(var i=0; i<children.length; i++){
                     (children[i].parent == this.rootNode.id && this.hideRoot) && (children[i].parent = '#');
-                    for(var j=0; j<selected.length; j++){
-                        if(children[i].id.toString() == selected[j].id){
-                            children[i].a_attr['data-selected'] = true;
-                        };
-                    };
                 }
-                cb(children)
+                cb(children);
             }.bind(this));
         } else {
             cb([this.rootNode]);
@@ -41,42 +57,105 @@
         }
     };
 
-    TreeView.prototype.initialiseTree = function(){
-        this.$el.jstree({
+    TagsTree.prototype.treeInit = function(){
+        var self = this;
+
+        this.$tree.jstree({
+            'plugins': ['checkbox', 'types'],
+            'checkbox' : {
+                'tie_selection': false,
+                'cascade': 'up',
+                'three_state' : false
+            },
+            'types': {
+                'default': {
+                    'icon': 'jstree-default-responsive jstree-file'
+                }
+            },
             'core': {
-                'multiple': false,
                 'data': this.getTreeData.bind(this)
+            },
+
+        }).on("load_node.jstree", function (event, data) {
+            var selectedTags = self.tags.tags.items;
+
+            if(selectedTags.length){
+                var Ids = selectedTags.map(tag => tag.id);
+                data.instance.check_node(Ids);
             }
         });
     };
 
-    // eztags tree version setup
-    $.EzTags.Tree = $.EzTags.Default.extend({
-        setup_events: function(){
-            $.EzTags.Default.prototype.setup_events.apply(this, arguments);
-            this.$el.parent().on('click', 'a.jstree-anchor:not(.jstree-disabled)', function(e){
-                this.add($(e.currentTarget).data());
+
+    $.EzTags.Tree = $.EzTags.Base.extend({
+        templates: {
+            skeleton: [
+                '<div class="tagssuggest-ui">',
+                '<div class="tags-output">',
+                '<label><%=tr.selectedTags%>:</label>'
+                ,                  '<div class="tags-list tags-listed no-results">',
+                '<p class="loading"><%=tr.loading%></p>',
+                '<p class="no-results"><%=tr.noSelectedTags%>.</p>',
+                '<ul class="float-break clearfix js-tags-selected"></ul>',
+                '</div>',
+                '</div>',
+                '</div>'
+            ],
+            suggestedItem: [],
+            selectedItem: ['<li data-cid="<%= tag.cid %>"><!--<img src="<%=tag.flagSrc %>" />--><%=tag.name%><a href="#" class="js-tags-remove" title="<%=tr.removeTag%>">&times;</a></li>'],
+            autocompleteItem: [],
+
+        },
+
+        /**
+         * Initializes Select EzTag. Calls fetch tags function with callback which appends
+         * fetched tags to select dropdowns. Also, registers 'onChange' listener on
+         * all select dropdowns.
+         */
+        initialize: function(){
+            var self = this;
+            this.$tree_element = this.$el.parent().find('.ez-tags-tree-selector');
+
+            $('.ez-tags-tree-selector').on('click', '.jstree-anchor', function(e){
+                e.preventDefault();
+                var selectedNode = $(e.target).jstree(true).get_node($(e.target));
+
+                if(self.max_tags_limit_reached() && selectedNode.state.checked === true){
+                    $(e.target).jstree(true).uncheck_node(selectedNode.id);
+                    return;
+                }
+
+                var attributes = {
+                    id: selectedNode.id,
+                    name: selectedNode.text,
+                    locale: self.opts.locale,
+                    parent: selectedNode.parent,
+                };
+
+                if(selectedNode.state.checked === false)
+                {
+                    self.remove(attributes.id);
+                }
+                else if(selectedNode.state.checked === true){
+                    self.add(attributes, {});
+                }
+
             }.bind(this));
-            this.on('remove:after', this.remove_data_selected.bind(this));
-            this.on('add:after', function(e, data){
-                this.add_data_selected(data.tag.id);
-            }.bind(this));
+
             this.addTree();
         },
-
+        setup_events: function(){
+            $.EzTags.Default.prototype.setup_events.apply(this, arguments);
+            this.$el.on('click', '.js-tags-remove', $.proxy(this.handler_unchecked_tree, this));
+        },
+        handler_unchecked_tree: function(event){
+            $('.ez-tags-tree-selector').children().jstree(true).uncheck_node(event.result.id);
+        },
         addTree: function(){
-            var tree = new TreeView(this.$el.parent().find('.ez-tags-tree-selector'));
+            var tree = new TagsTree(this.$tree_element);
             tree.tags = this;
-        },
-
-        // add data attribute to dom element for styling of selected tag in tree
-        remove_data_selected: function(e, data){
-            this.$el.parent().find('a.jstree-anchor[data-id=' + data.tag.id + ']').removeAttr('data-selected');
-        },
-
-        add_data_selected: function(id){
-            this.$el.parent().find('a.jstree-anchor[data-id=' + id + ']').attr('data-selected', true);
         }
     });
 
 })();
+

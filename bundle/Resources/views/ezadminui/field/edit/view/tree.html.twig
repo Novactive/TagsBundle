@@ -1,0 +1,13 @@
+{% if field_definition.validatorConfiguration.TagsValueValidator.maxTags %}
+    <p> Max number of tags : {{ field_definition.validatorConfiguration.TagsValueValidator.maxTags|default(0) }}</p>
+{% endif %}
+
+<div class="ez-tags-tree-selector">
+    <div
+        class="tags-tree"
+        data-path="{{ path('netgen_tags_admin_tree_get_children', {tagId: '_tagId_'}) }}"
+        data-root-tag-id="{{ field_definition.validatorConfiguration.TagsValueValidator.subTreeLimit }}"
+        data-hide-root-tag="{% if field_definition.fieldSettings.hideRootTag|default(false) %}1{% else %}0{% endif %}"
+    ></div>
+
+</div>
