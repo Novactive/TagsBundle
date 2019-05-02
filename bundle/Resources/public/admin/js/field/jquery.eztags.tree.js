@@ -3,79 +3,60 @@
 (function() {
     'use strict';
 
-    // jstree setup
-    function TreeView(el){
-        this.$el = $(el);
-        this.rootNodeAdded = false;
-        this.rootNode = {};
-        this.getSetupData();
-    };
-
-    TreeView.prototype.getSetupData = function(){
-        $.getJSON(this.$el.data('config-url') + '?ContentType=json', function(data) {
-            this.rootNode = data.content.config.rootTag;
-            this.hideRoot = data.content.config.hideRootTag;
-            this.initialiseTree();
-        }.bind(this));
-    };
-
-    TreeView.prototype.getTreeData = function(node, cb){
-        if(this.rootNodeAdded || this.hideRoot){
-            var tagId = node.id == '#' ? this.rootNode.id : node.id;
-            $.getJSON(this.$el.data('base-url') + tagId + '?ContentType=json', function(data) {
-                var children = data.content.children;
-                var selected = this.tags.tags.items;
-                for(var i=0; i<children.length; i++){
-                    (children[i].parent == this.rootNode.id && this.hideRoot) && (children[i].parent = '#');
-                    for(var j=0; j<selected.length; j++){
-                        if(children[i].id.toString() == selected[j].id){
-                            children[i].a_attr['data-selected'] = true;
-                        };
-                    };
-                }
-                cb(children)
-            }.bind(this));
-        } else {
-            cb([this.rootNode]);
-            this.rootNodeAdded = true;
-        }
-    };
-
-    TreeView.prototype.initialiseTree = function(){
-        this.$el.jstree({
-            'core': {
-                'multiple': false,
-                'data': this.getTreeData.bind(this)
-            }
-        });
-    };
+    var $ = jQuery;
 
     // eztags tree version setup
     $.EzTags.Tree = $.EzTags.Default.extend({
+        templates: {
+            skeleton: [],
+            suggestedItem: ['<li class="js-suggested-item" data-cid="<%= tag.cid %>" title="<%=tr.clickAddThisTag%>"><!--<img src="<%=tag.flagSrc %>"/>--><%=tag.name%></li>'],
+            selectedItem: ['<li data-cid="<%= tag.cid %>"><!--<img src="<%=tag.flagSrc %>" />--><%=tag.name%><a href="#" class="js-tags-remove" title="<%=tr.removeTag%>">&times;</a></li>'],
+            autocompleteItem: ['<div data-cid="<%= tag.cid %>" class="js-autocomplete-item resultItem <%= tag.main_tag_id !== 0 ? "itemSynonym" : "" %>"><a href="#"><!--<img src="<%=tag.flagSrc %>"/>--><%=tag.name%><span><%= tag.parent_name %></span></a></div>'],
+        },
+
+        initialize: function(){
+            $.EzTags.Default.prototype.initialize.apply(this);
+
+
+            this.fetch_all_tags();
+        },
+        setup_ui: function(){
+            $.EzTags.Default.prototype.setup_ui.apply(this);
+            this.$tag_selector_tree_element = $('#tags-selector-tree-'+this.group_id);
+        },
         setup_events: function(){
-            $.EzTags.Default.prototype.setup_events.apply(this, arguments);
-            this.$el.parent().on('click', 'a.jstree-anchor:not(.jstree-disabled)', function(e){
-                this.add($(e.currentTarget).data());
+            $.EzTags.Default.prototype.setup_events.apply(this);
+            this.$tag_selector_tree_element.on('click', 'li[role="treeitem"] .jstree-anchor', $.proxy(this.handler_select_tag, this));
+            var self = this,
+                $jstree = $('.tags-tree', this.$tag_selector_tree_element);
+            $jstree.on("load_node.jstree", function (event, data) {
+                var node = data.node,
+                    nodeIds = [node.id, ...node.children];
+                for(var i in nodeIds){
+                    if(self.tags.indexed[nodeIds[i]] !== undefined){
+                        data.instance.check_node(nodeIds[i]);
+                    }
+                }
+            });
+            this.on('remove:after', function (e, data) {
+                $jstree.jstree(true).uncheck_node(data.tag.id);
             }.bind(this));
-            this.on('remove:after', this.remove_data_selected.bind(this));
-            this.on('add:after', function(e, data){
-                this.add_data_selected(data.tag.id);
+
+            this.on('add:after', function (e, data) {
+                $jstree.jstree(true).check_node(data.tag.id);
             }.bind(this));
-            this.addTree();
         },
 
-        addTree: function(){
-            var tree = new TreeView(this.$el.parent().find('.ez-tags-tree-selector'));
-            tree.tags = this;
-        },
+        handler_select_tag: function(e){
+            e.preventDefault();
+            var tagId = $(e.target).closest('li[role="treeitem"]').attr('id');
+            var tag = this.autocomplete_tags.indexed[tagId];
 
-        // add data attribute to dom element for styling of selected tag in tree
-        remove_data_selected: function(e, data){
-            this.$el.parent().find('a.jstree-anchor[data-id=' + data.tag.id + ']').removeAttr('data-selected');
-        },
-
-        add_data_selected: function(id){
-            this.$el.parent().find('a.jstree-anchor[data-id=' + id + ']').attr('data-selected', true);
+            if (this.tag_is_selected(tag)) {
+                this.remove(tag.id);
+            }else{
+                this.add(tag);
+            }
         }
     });
 

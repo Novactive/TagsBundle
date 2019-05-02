@@ -9,3 +9,7 @@ system:
                 identifier: Select
                 name: field_definition.eztags.settings.edit_view.select
                 template: '@NetgenTags/ezadminui/field/edit/view/select.html.twig'
+            tree:
+                identifier: Tree
+                name: field_definition.eztags.settings.edit_view.tree
+                template: '@NetgenTags/ezadminui/field/edit/view/tree.html.twig'

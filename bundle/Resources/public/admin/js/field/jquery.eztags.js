@@ -608,13 +608,14 @@
    * @param  {object} tag The tag object
    */
   Base.prototype.tag_is_selected = function(selectedTag){
-    var self = this;
-    $.map(this.tags.items, function(tag){
-      if (tag.id == selectedTag.id) {
-        self.show_tag_selected(tag);
-        return true;
-      }
-    });
+    var tags = this.tags.items;
+    for(var i in tags){
+        var tag = tags[i];
+        if (tag.id == selectedTag.id) {
+            this.show_tag_selected(tag);
+            return true;
+        }
+    }
 
     return false;
   };
