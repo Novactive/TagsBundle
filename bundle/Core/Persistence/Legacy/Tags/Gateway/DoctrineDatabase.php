@@ -529,6 +529,9 @@ class DoctrineDatabase extends Gateway
                 $this->handler->quoteColumn('remote_id'),
                 $query->bindValue($createStruct->remoteId, null, PDO::PARAM_STR)
             )->set(
+                $this->handler->quoteColumn('priority'),
+                $query->bindValue($createStruct->priority ? $createStruct->priority : "0", null, PDO::PARAM_STR)
+            )->set(
                 $this->handler->quoteColumn('main_language_id'),
                 $query->bindValue(
                     $this->languageHandler->loadByLanguageCode(
@@ -599,6 +602,9 @@ class DoctrineDatabase extends Gateway
             )->set(
                 $this->handler->quoteColumn('remote_id'),
                 $query->bindValue($updateStruct->remoteId, null, PDO::PARAM_STR)
+            )->set(
+                $this->handler->quoteColumn('priority'),
+                $query->bindValue($updateStruct->priority, null, PDO::PARAM_STR)
             )->set(
                 $this->handler->quoteColumn('main_language_id'),
                 $query->bindValue(
@@ -684,6 +690,9 @@ class DoctrineDatabase extends Gateway
             )->set(
                 $this->handler->quoteColumn('remote_id'),
                 $query->bindValue($createStruct->remoteId, null, PDO::PARAM_STR)
+            )->set(
+                $this->handler->quoteColumn('priority'),
+                $query->bindValue($createStruct->priority ? $createStruct->priority : "0", null, PDO::PARAM_STR)
             )->set(
                 $this->handler->quoteColumn('main_language_id'),
                 $query->bindValue(
@@ -1119,6 +1128,7 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn($query, 'depth', 'eztags'),
             $this->handler->aliasedColumn($query, 'path_string', 'eztags'),
             $this->handler->aliasedColumn($query, 'modified', 'eztags'),
+            $this->handler->aliasedColumn($query, 'priority', 'eztags'),
             $this->handler->aliasedColumn($query, 'remote_id', 'eztags'),
             $this->handler->aliasedColumn($query, 'main_language_id', 'eztags'),
             $this->handler->aliasedColumn($query, 'language_mask', 'eztags'),
@@ -1181,6 +1191,9 @@ class DoctrineDatabase extends Gateway
                 );
             }
         }
+        $query->orderBy(
+            $this->handler->quoteColumn('priority', 'eztags')
+        );
 
         return $query;
     }

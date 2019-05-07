@@ -15,13 +15,14 @@
 {% endif %}
 
 {% if childrenTags is not empty %}
-    <form method="post" action="{{ path('netgen_tags_admin_tag_children', {'tagId': tag is defined ? tag.id : 0}) }}">
+    <form class="tagChildren" method="post" action="{{ path('netgen_tags_admin_tag_children', {'tagId': tag is defined ? tag.id : 0}) }}">
         <table>
             <thead>
                 <tr>
                     <th></th>
                     <th>{{ 'tag.tag_id'|trans }}</th>
                     <th>{{ 'tag.tag_name'|trans }}</th>
+                    <th>{{ 'tag.priority'|trans }}</th>
                     <th>{{ 'tag.translations'|trans }}</th>
                     <th>{{ 'tag.modified'|trans }}</th>
                 </tr>
@@ -36,6 +37,13 @@
                         </td>
                         <td>{{ child.id }}</td>
                         <td><a href="{{ path('netgen_tags_admin_tag_show', {'tagId': child.id}) }}">{{ netgen_tags_tag_keyword(child) }}</a></td>
+                        <td>
+                            {% if can_manipulate_children %}
+                                <div class="priority">
+                                    <input type="number" value="{{ child.priority }}" name="priority" data-tagid={{ child.id }} readonly>
+                                </div>
+                            {% endif %}
+                        </td>
                         <td>
                             {% for languageCode in child.keywords|keys %}
                                 {% if can_edit %}<a href="{{ path('netgen_tags_admin_tag_update', {'tagId': child.id, 'languageCode': languageCode}) }}">{% endif %}

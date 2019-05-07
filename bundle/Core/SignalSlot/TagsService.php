@@ -267,6 +267,7 @@ class TagsService implements TagsServiceInterface
      */
     public function createTag(TagCreateStruct $tagCreateStruct)
     {
+
         $returnValue = $this->service->createTag($tagCreateStruct);
         $this->signalDispatcher->emit(
             new CreateTagSignal(
@@ -274,6 +275,7 @@ class TagsService implements TagsServiceInterface
                     'tagId' => $returnValue->id,
                     'parentTagId' => $returnValue->parentTagId,
                     'keywords' => $returnValue->keywords,
+                    'priority' => $returnValue->priority,
                     'mainLanguageCode' => $returnValue->mainLanguageCode,
                     'alwaysAvailable' => $returnValue->alwaysAvailable,
                 ]
@@ -304,6 +306,7 @@ class TagsService implements TagsServiceInterface
                     'tagId' => $returnValue->id,
                     'keywords' => $returnValue->keywords,
                     'remoteId' => $returnValue->remoteId,
+                    'priority' => $returnValue->priority,
                     'mainLanguageCode' => $returnValue->mainLanguageCode,
                     'alwaysAvailable' => $returnValue->alwaysAvailable,
                 ]

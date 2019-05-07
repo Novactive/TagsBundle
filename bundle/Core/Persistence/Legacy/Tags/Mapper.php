@@ -52,6 +52,7 @@ class Mapper
         $tagInfo->depth = (int) $row['depth'];
         $tagInfo->pathString = $row['path_string'];
         $tagInfo->modificationDate = (int) $row['modified'];
+        $tagInfo->priority = $row['priority'];
         $tagInfo->remoteId = $row['remote_id'];
         $tagInfo->alwaysAvailable = ((int) $row['language_mask'] & 1) ? true : false;
         $tagInfo->mainLanguageCode = $this->languageHandler->load($row['main_language_id'])->languageCode;
@@ -81,6 +82,7 @@ class Mapper
                 $tag->depth = (int) $row['eztags_depth'];
                 $tag->pathString = $row['eztags_path_string'];
                 $tag->modificationDate = (int) $row['eztags_modified'];
+                $tag->priority = $row['eztags_priority'];
                 $tag->remoteId = $row['eztags_remote_id'];
                 $tag->alwaysAvailable = ((int) $row['eztags_language_mask'] & 1) ? true : false;
                 $tag->mainLanguageCode = $this->languageHandler->load($row['eztags_main_language_id'])->languageCode;

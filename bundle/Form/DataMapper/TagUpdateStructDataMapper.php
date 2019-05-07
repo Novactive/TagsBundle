@@ -40,6 +40,7 @@ class TagUpdateStructDataMapper implements DataMapperInterface
 
         $forms['keyword']->setData($data->getKeyword($this->languageCode));
         $forms['alwaysAvailable']->setData($data->alwaysAvailable);
+        $forms['priority']->setData($data->priority);
         $forms['remoteId']->setData($data->remoteId);
     }
 
@@ -67,5 +68,6 @@ class TagUpdateStructDataMapper implements DataMapperInterface
 
         $data->alwaysAvailable = $forms['alwaysAvailable']->getData();
         $data->remoteId = $forms['remoteId']->getData();
+        $data->priority = $forms['priority']->getData();
     }
 }

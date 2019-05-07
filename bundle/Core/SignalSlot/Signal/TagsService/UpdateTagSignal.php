@@ -7,6 +7,17 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateTagSignal extends Signal
 {
     /**
+     *
+     * Tag priority.
+     *
+     * Position of the tag among its siblings when sorted using priority
+     * sort order.
+     *
+     * @var mixed
+     */
+    public $priority;
+
+    /**
      * Tag ID.
      *
      * @var mixed

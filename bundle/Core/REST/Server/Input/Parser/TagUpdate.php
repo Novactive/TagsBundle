@@ -54,6 +54,10 @@ class TagUpdate extends BaseParser
             $tagUpdateStruct->remoteId = $data['remoteId'];
         }
 
+        if (array_key_exists('priority', $data)) {
+            $tagUpdateStruct->priority = $data['priority'];
+        }
+
         if (array_key_exists('alwaysAvailable', $data)) {
             $tagUpdateStruct->alwaysAvailable = $this->parserTools->parseBooleanValue($data['alwaysAvailable']);
         }
@@ -68,7 +72,6 @@ class TagUpdate extends BaseParser
                 $tagUpdateStruct->setKeyword($keyword, $languageCode);
             }
         }
-
         return $tagUpdateStruct;
     }
 }

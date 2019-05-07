@@ -1,11 +1,12 @@
 {% trans_default_domain 'eztags_admin' %}
 
 {% if synonyms is not empty %}
-    <table>
+    <table  class="tagChildren">
         <thead>
             <tr>
                 <th>{{ 'tag.tag_id'|trans }}</th>
                 <th>{{ 'tag.tag_name'|trans }}</th>
+                <th>{{ 'tag.priority'|trans }}</th>
                 <th>{{ 'tag.modified'|trans }}</th>
             </tr>
         </thead>
@@ -14,6 +15,11 @@
                 <tr>
                     <td>{{ synonym.id }}</td>
                     <td><a href="{{ path('netgen_tags_admin_tag_show', {'tagId': synonym.id}) }}">{{ netgen_tags_tag_keyword(synonym) }}</a></td>
+                    <td>
+                        <div class="priority">
+                            <input type="number" value="{{ synonym.priority }}" name="priority" data-tagid={{ synonym.id }} readonly>
+                        </div>
+                    </td>
                     <td>{{ synonym.modificationDate|date }}</td>
                 </tr>
             {% endfor %}

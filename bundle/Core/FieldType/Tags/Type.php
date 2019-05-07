@@ -153,6 +153,7 @@ class Type extends FieldType
                     [
                         'parentTagId' => $hashItem['parent_id'],
                         'keywords' => $hashItem['keywords'],
+                        'priority' => $hashItem['priority'],
                         'mainLanguageCode' => $hashItem['main_language_code'],
                         'remoteId' => isset($hashItem['remote_id']) ?
                             $hashItem['remote_id'] :
@@ -188,6 +189,7 @@ class Type extends FieldType
                     'parent_id' => $tag->parentTagId,
                     'keywords' => $tag->keywords,
                     'remote_id' => $tag->remoteId,
+                    'priority' => $tag->priority,
                     'always_available' => $tag->alwaysAvailable,
                     'main_language_code' => $tag->mainLanguageCode,
                 ];
@@ -201,6 +203,7 @@ class Type extends FieldType
                     'path_string' => $tag->pathString,
                     'modified' => $tag->modificationDate->getTimestamp(),
                     'remote_id' => $tag->remoteId,
+                    'priority' => $tag->priority,
                     'always_available' => $tag->alwaysAvailable,
                     'main_language_code' => $tag->mainLanguageCode,
                     'language_codes' => $tag->languageCodes,

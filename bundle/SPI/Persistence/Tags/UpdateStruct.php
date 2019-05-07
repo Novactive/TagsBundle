@@ -10,6 +10,17 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class UpdateStruct extends ValueObject
 {
     /**
+     *
+     * Tag priority.
+     *
+     * Position of the tag among its siblings when sorted using priority
+     * sort order.
+     *
+     * @var mixed
+     */
+    public $priority;
+
+    /**
      * Tag keywords in the target languages
      * Eg. array( "cro-HR" => "Hrvatska", "eng-GB" => "Croatia" ).
      *

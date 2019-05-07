@@ -131,6 +131,7 @@ class LegacyStorage extends Gateway
                 $this->dbHandler->aliasedColumn($query, 'path_string', 'eztags'),
                 $this->dbHandler->aliasedColumn($query, 'modified', 'eztags'),
                 $this->dbHandler->aliasedColumn($query, 'remote_id', 'eztags'),
+                $this->dbHandler->aliasedColumn($query, 'priority', 'eztags'),
                 $this->dbHandler->aliasedColumn($query, 'main_language_id', 'eztags'),
                 $this->dbHandler->aliasedColumn($query, 'language_mask', 'eztags'),
                 // Tag keywords
@@ -184,6 +185,7 @@ class LegacyStorage extends Gateway
                 $tagList[$tagId]['depth'] = (int) $row['eztags_depth'];
                 $tagList[$tagId]['path_string'] = $row['eztags_path_string'];
                 $tagList[$tagId]['modified'] = (int) $row['eztags_modified'];
+                $tagList[$tagId]['priority'] = $row['eztags_priority'];
                 $tagList[$tagId]['remote_id'] = $row['eztags_remote_id'];
                 $tagList[$tagId]['always_available'] = ((int) $row['eztags_language_mask'] & 1) ? true : false;
                 $tagList[$tagId]['main_language_code'] = $this->languageHandler->load($row['eztags_main_language_id'])->languageCode;

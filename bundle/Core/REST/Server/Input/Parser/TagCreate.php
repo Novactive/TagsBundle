@@ -67,6 +67,10 @@ class TagCreate extends BaseParser
             $tagCreateStruct->remoteId = $data['remoteId'];
         }
 
+        if (array_key_exists('priority', $data)) {
+            $tagCreateStruct->priority = $data['priority'];
+        }
+
         if (array_key_exists('alwaysAvailable', $data)) {
             $tagCreateStruct->alwaysAvailable = $this->parserTools->parseBooleanValue($data['alwaysAvailable']);
         }

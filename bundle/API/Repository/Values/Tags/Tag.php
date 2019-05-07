@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * Class representing a tag.
  *
  * @property-read mixed $id Tag ID
+ * @property-read mixed $priority Tag Priority
  * @property-read mixed $parentTagId Parent tag ID
  * @property-read mixed $mainTagId Main tag ID
  * @property-read string $keyword Convenience getter for $this->getKeyword() and BC layer
@@ -23,6 +24,17 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class Tag extends ValueObject
 {
+    /**
+     *
+     * Tag priority.
+     *
+     * Position of the tag among its siblings when sorted using priority
+     * sort order.
+     *
+     * @var mixed
+     */
+    protected $priority;
+
     /**
      * Tag ID.
      *
