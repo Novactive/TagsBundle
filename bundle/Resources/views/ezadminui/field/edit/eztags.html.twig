@@ -18,6 +18,7 @@
                 data-max-tags="{{ field_definition.validatorConfiguration.TagsValueValidator.maxTags|default(0) }}"
                 data-locale="{{ field.languageCode }}"
                 data-icon-path=""
+                data-required="{{ required }}"
                 >
 
                 {{ form_row(form.ids, {attr: {class: 'tagids'}}) }}
