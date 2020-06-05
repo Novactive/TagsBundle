@@ -10,6 +10,17 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class Tag extends ValueObject
 {
     /**
+     *
+     * Tag priority.
+     *
+     * Position of the tag among its siblings when sorted using priority
+     * sort order.
+     *
+     * @var int
+     */
+    public $priority;
+
+    /**
      * Tag ID.
      *
      * @var mixed

@@ -10,6 +10,17 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class SynonymCreateStruct extends ValueObject
 {
     /**
+     *
+     * Tag priority.
+     *
+     * Position of the tag among its siblings when sorted using priority
+     * sort order.
+     *
+     * @var mixed
+     */
+    public $priority;
+
+    /**
      * The ID of the main tag for which the new synonym should be created.
      *
      * @required

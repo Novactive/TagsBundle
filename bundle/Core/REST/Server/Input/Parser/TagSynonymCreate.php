@@ -57,6 +57,10 @@ class TagSynonymCreate extends BaseParser
             $synonymCreateStruct->remoteId = $data['remoteId'];
         }
 
+        if (array_key_exists('priority', $data)) {
+            $synonymCreateStruct->priority = $data['priority'];
+        }
+
         if (array_key_exists('alwaysAvailable', $data)) {
             $synonymCreateStruct->alwaysAvailable = $this->parserTools->parseBooleanValue($data['alwaysAvailable']);
         }

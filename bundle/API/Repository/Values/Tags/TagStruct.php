@@ -7,6 +7,17 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class TagStruct extends ValueObject
 {
     /**
+     *
+     * Tag priority.
+     *
+     * Position of the tag among its siblings when sorted using priority
+     * sort order.
+     *
+     * @var mixed
+     */
+    public $priority;
+
+    /**
      * The main language code for the tag.
      *
      * Required when creating a tag.

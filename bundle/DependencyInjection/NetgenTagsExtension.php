@@ -52,6 +52,7 @@ class NetgenTagsExtension extends Extension implements PrependExtensionInterface
         $loader->load('param_converters.yml');
         $loader->load('installer.yml');
         $loader->load('search/related_content.yml');
+        $loader->load('slot.yml');
 
         $persistenceCache = 'disabled';
         if ($container->getParameter('eztags.enable_persistence_cache')) {

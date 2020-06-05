@@ -36,6 +36,14 @@ class TagType extends AbstractType
                     'label' => 'tag.remote_id',
                     'required' => false,
                 ]
+            )
+            ->add(
+                'priority',
+                TextType::class,
+                [
+                    'label' => 'tag.priority',
+                    'required' => false,
+                ]
             );
     }
 }

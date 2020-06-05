@@ -136,6 +136,10 @@ class TagsStorage extends GatewayBasedStorage
             $tagCreateStruct->remoteId = $tagData['remote_id'];
         }
 
+        if (isset($tagData['priority'])) {
+            $tagCreateStruct->priority = $tagData['priority'];
+        }
+
         if (isset($tagData['always_available'])) {
             $tagCreateStruct->alwaysAvailable = $tagData['always_available'];
         }

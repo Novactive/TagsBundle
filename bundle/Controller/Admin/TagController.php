@@ -290,6 +290,7 @@ class TagController extends Controller
         $this->denyAccessUnlessGranted('ez:tags:edit' . ($tag->isSynonym() ? 'synonym' : ''));
 
         $tagUpdateStruct = $this->tagsService->newTagUpdateStruct();
+        $tagUpdateStruct->priority = $tag->priority;
         $tagUpdateStruct->remoteId = $tag->remoteId;
         $tagUpdateStruct->alwaysAvailable = $tag->alwaysAvailable;
 

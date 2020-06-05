@@ -345,6 +345,45 @@ function ngTagsInit(){
         $('input[data-enable="' + name + '"]:checked').length ? $('[data-enabler="' + name + '"]').removeAttr('disabled') : $('[data-enabler="' + name + '"]').attr('disabled', 'disabled');
     });
 
+    /* ajax update priority with drag & drop action */
+    var doc = document;
+    var token = doc.querySelector('meta[name="CSRF-Token"]').content;
+
+    var updatePriority = function (tag) {
+        var tag_id = tag.data('tagid');
+        var request = $.ajax({
+            url: "/api/ezp/v2/tags/"+tag_id,
+            headers: {
+                Accept: 'application/vnd.ez.api.Tag+json',
+                'Content-Type': 'application/vnd.ez.api.TagUpdate+json',
+                'X-CSRF-Token': token,
+                'X-siteaccess': "admin",
+                'X-HTTP-Method-Override': 'PATCH',
+            },
+            credentials: 'same-origin',
+            method: 'POST',
+            mode: 'cors',
+            data: '{ "TagUpdate": {"priority":' + tag.val() + '}}',
+        });
+    };
+
+    if($('.tagChildren input[name="priority"]').length){
+        $('.tagChildren input[name="priority"]').click(function(){
+            $(this).removeAttr("readonly");
+        });
+
+        $('.tagChildren input[name="priority"]').focusout(function(){
+            $(this).attr("readonly",true);
+            updatePriority($(this));
+        });
+
+        $('.tagChildren input[name="priority"]').on('keypress',function(e) {
+            if(e.which == 13) {
+                $(this).attr("readonly",true);
+                updatePriority($(this));
+            }
+        });
+    }
 }
 
 jQuery(document).ready(function($) {

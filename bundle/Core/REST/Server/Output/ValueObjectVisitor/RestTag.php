@@ -86,6 +86,9 @@ class RestTag extends ValueObjectVisitor
         $generator->startValueElement('remoteId', $tag->remoteId);
         $generator->endValueElement('remoteId');
 
+        $generator->startValueElement('priority', $tag->priority);
+        $generator->endValueElement('priority');
+
         $generator->startValueElement(
             'alwaysAvailable',
             $this->serializeBool($generator, $tag->alwaysAvailable)

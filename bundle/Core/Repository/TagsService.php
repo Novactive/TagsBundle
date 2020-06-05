@@ -568,6 +568,7 @@ class TagsService implements TagsServiceInterface
         $createStruct->parentTagId = !empty($tagCreateStruct->parentTagId) ? $tagCreateStruct->parentTagId : 0;
         $createStruct->mainLanguageCode = $tagCreateStruct->mainLanguageCode;
         $createStruct->keywords = $keywords;
+        $createStruct->priority = $tagCreateStruct->priority;
         $createStruct->remoteId = $tagCreateStruct->remoteId;
         $createStruct->alwaysAvailable = $tagCreateStruct->alwaysAvailable;
 
@@ -664,6 +665,7 @@ class TagsService implements TagsServiceInterface
 
         $updateStruct = new UpdateStruct();
         $updateStruct->keywords = $newKeywords !== null ? $newKeywords : $spiTag->keywords;
+        $updateStruct->priority = $tagUpdateStruct->priority !== null ? trim($tagUpdateStruct->priority) : $spiTag->priority;
         $updateStruct->remoteId = $tagUpdateStruct->remoteId !== null ? trim($tagUpdateStruct->remoteId) : $spiTag->remoteId;
         $updateStruct->mainLanguageCode = $tagUpdateStruct->mainLanguageCode !== null ? trim($tagUpdateStruct->mainLanguageCode) : $spiTag->mainLanguageCode;
         $updateStruct->alwaysAvailable = $tagUpdateStruct->alwaysAvailable !== null ? $tagUpdateStruct->alwaysAvailable : $spiTag->alwaysAvailable;
@@ -742,6 +744,7 @@ class TagsService implements TagsServiceInterface
         $createStruct->mainTagId = $synonymCreateStruct->mainTagId;
         $createStruct->mainLanguageCode = $synonymCreateStruct->mainLanguageCode;
         $createStruct->keywords = $keywords;
+        $createStruct->priority = $synonymCreateStruct->priority;
         $createStruct->remoteId = $synonymCreateStruct->remoteId;
         $createStruct->alwaysAvailable = $synonymCreateStruct->alwaysAvailable;
 
@@ -1164,6 +1167,7 @@ class TagsService implements TagsServiceInterface
                     'depth' => $spiTag->depth,
                     'pathString' => $spiTag->pathString,
                     'modificationDate' => $modificationDate,
+                    'priority' => $spiTag->priority,
                     'remoteId' => $spiTag->remoteId,
                     'alwaysAvailable' => $spiTag->alwaysAvailable,
                     'mainLanguageCode' => $spiTag->mainLanguageCode,

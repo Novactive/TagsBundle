@@ -174,8 +174,8 @@ class Handler implements BaseTagsHandler
      */
     public function loadChildren($tagId, $offset = 0, $limit = -1, array $translations = null, $useAlwaysAvailable = true)
     {
+        
         $tags = $this->gateway->getChildren($tagId, $offset, $limit, $translations, $useAlwaysAvailable);
-
         return $this->mapper->extractTagListFromRows($tags);
     }
 
