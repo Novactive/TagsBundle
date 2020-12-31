@@ -3,18 +3,26 @@
 namespace Netgen\TagsBundle\Core\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
+use EzSystems\PlatformHttpCacheBundle\SignalSlot\AbstractSlot;
 use Netgen\TagsBundle\Core\SignalSlot\Signal\TagsService\MergeTagsSignal;
 
-class MergeTagsSlot extends AbstractPublishSlot
+class MergeTagsSlot extends AbstractSlot
 {
     /**
      * @param MergeTagsSignal $signal
      *
-     * @return Signal|mixed
+     * @return string[]
      */
-    protected function getNgTagId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->targetTagId;
+        return [
+            'tag-' . $signal->tagId,
+            'tag-' . $signal->targetTagId,
+            'tag-' . $signal->parentTagId,
+            'tag-' . $signal->targetParentTagId,
+            'parent-tag-' . $signal->parentTagId,
+            'parent-tag-' . $signal->targetParentTagId,
+        ];
     }
 
     /**

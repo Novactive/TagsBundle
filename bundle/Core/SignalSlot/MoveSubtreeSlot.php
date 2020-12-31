@@ -3,20 +3,26 @@
 namespace Netgen\TagsBundle\Core\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
+use EzSystems\PlatformHttpCacheBundle\SignalSlot\AbstractSlot;
 use Netgen\TagsBundle\Core\SignalSlot\Signal\TagsService\MoveSubtreeSignal;
 
-class MoveSubtreeSlot extends AbstractPublishSlot
+class MoveSubtreeSlot extends AbstractSlot
 {
     /**
      * @param MoveSubtreeSignal $signal
      *
-     * @return Signal|mixed
+     * @return string[]
      */
-    protected function getNgTagId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->targetParentTagId;
+        return [
+            'tag-' . $signal->sourceTagId,
+            'tag-' . $signal->sourceParentTagId,
+            'tag-' . $signal->targetParentTagId,
+            'parent-tag-' . $signal->sourceParentTagId,
+            'parent-tag-' . $signal->targetParentTagId,
+        ];
     }
-
     /**
      * @param Signal $signal
      *

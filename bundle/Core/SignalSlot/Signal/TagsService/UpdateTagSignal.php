@@ -14,6 +14,13 @@ class UpdateTagSignal extends Signal
     public $tagId;
 
     /**
+     * Parent Tag ID.
+     *
+     * @var mixed
+     */
+    public $parentTagId;
+
+    /**
      * Tag keywords in the available languages
      * Eg. array( "cro-HR" => "Hrvatska", "eng-GB" => "Croatia" ).
      *

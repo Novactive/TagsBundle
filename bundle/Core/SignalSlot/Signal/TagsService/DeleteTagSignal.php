@@ -12,4 +12,11 @@ class DeleteTagSignal extends Signal
      * @var mixed
      */
     public $tagId;
+
+    /**
+     * Parent Tag ID.
+     *
+     * @var mixed
+     */
+    public $parentTagId;
 }

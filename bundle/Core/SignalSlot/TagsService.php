@@ -302,6 +302,7 @@ class TagsService implements TagsServiceInterface
             new UpdateTagSignal(
                 [
                     'tagId' => $returnValue->id,
+                    'parentTagId' => $returnValue->parentTagId,
                     'keywords' => $returnValue->keywords,
                     'remoteId' => $returnValue->remoteId,
                     'mainLanguageCode' => $returnValue->mainLanguageCode,
@@ -330,6 +331,7 @@ class TagsService implements TagsServiceInterface
             new AddSynonymSignal(
                 [
                     'tagId' => $returnValue->id,
+                    'parentTagId' => $returnValue->parentTagId,
                     'mainTagId' => $returnValue->mainTagId,
                     'keywords' => $returnValue->keywords,
                     'mainLanguageCode' => $returnValue->mainLanguageCode,
@@ -361,6 +363,7 @@ class TagsService implements TagsServiceInterface
             new ConvertToSynonymSignal(
                 [
                     'tagId' => $returnValue->id,
+                    'parentTagId' => $returnValue->parentTagId,
                     'mainTagId' => $returnValue->mainTagId,
                 ]
             )
@@ -387,7 +390,9 @@ class TagsService implements TagsServiceInterface
             new MergeTagsSignal(
                 [
                     'tagId' => $tag->id,
+                    'parentTagId' => $tag->parentTagId,
                     'targetTagId' => $targetTag->id,
+                    'parentTagId' => $targetTag->parentTagId,
                 ]
             )
         );
@@ -414,6 +419,7 @@ class TagsService implements TagsServiceInterface
             new CopySubtreeSignal(
                 [
                     'sourceTagId' => $tag->id,
+                    'sourceParentTagId' => $tag->parentTagId,
                     'targetParentTagId' => $targetParentTag ?
                         $targetParentTag->id :
                         0,
@@ -446,6 +452,7 @@ class TagsService implements TagsServiceInterface
             new MoveSubtreeSignal(
                 [
                     'sourceTagId' => $tag->id,
+                    'sourceParentTagId' => $tag->parentTagId,
                     'targetParentTagId' => $targetParentTag ?
                         $targetParentTag->id :
                         0,
@@ -473,6 +480,7 @@ class TagsService implements TagsServiceInterface
             new DeleteTagSignal(
                 [
                     'tagId' => $tag->id,
+                    'parentTagId' => $tag->parentTagId,
                 ]
             )
         );

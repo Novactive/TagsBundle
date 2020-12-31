@@ -3,18 +3,23 @@
 namespace Netgen\TagsBundle\Core\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
+use EzSystems\PlatformHttpCacheBundle\SignalSlot\AbstractSlot;
 use Netgen\TagsBundle\Core\SignalSlot\Signal\TagsService\DeleteTagSignal;
 
-class DeleteTagSlot extends AbstractPublishSlot
+class DeleteTagSlot extends AbstractSlot
 {
     /**
      * @param DeleteTagSignal $signal
      *
-     * @return Signal|mixed
+     * @return string[]
      */
-    protected function getNgTagId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->tagId;
+        return [
+            'tag-' . $signal->tagId,
+            'tag-' . $signal->parentTagId,
+            'parent-tag-' . $signal->parentTagId,
+        ];
     }
 
     /**

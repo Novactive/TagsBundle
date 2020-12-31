@@ -3,18 +3,23 @@
 namespace Netgen\TagsBundle\Core\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
+use EzSystems\PlatformHttpCacheBundle\SignalSlot\AbstractSlot;
 use Netgen\TagsBundle\Core\SignalSlot\Signal\TagsService\CreateTagSignal;
 
-class CreateTagSlot extends AbstractPublishSlot
+class CreateTagSlot extends AbstractSlot
 {
     /**
      * @param CreateTagSignal $signal
      *
-     * @return Signal|mixed
+     * @return string[]
      */
-    protected function getNgTagId(Signal $signal)
+    protected function generateTags(Signal $signal)
     {
-        return $signal->tagId;
+        return [
+            'tag-' . $signal->tagId,
+            'tag-' . $signal->parentTagId,
+            'parent-tag-' . $signal->parentTagId,
+        ];
     }
 
     /**

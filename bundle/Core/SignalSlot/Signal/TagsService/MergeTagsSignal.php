@@ -14,9 +14,23 @@ class MergeTagsSignal extends Signal
     public $tagId;
 
     /**
+     * Parent Tag ID.
+     *
+     * @var mixed
+     */
+    public $parentTagId;
+
+    /**
      * Target tag ID.
      *
      * @var mixed
      */
     public $targetTagId;
+
+    /**
+     * Parent Tag ID.
+     *
+     * @var mixed
+     */
+    public $targetParentTagId;
 }

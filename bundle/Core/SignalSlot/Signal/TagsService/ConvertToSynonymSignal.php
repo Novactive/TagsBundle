@@ -14,6 +14,13 @@ class ConvertToSynonymSignal extends Signal
     public $tagId;
 
     /**
+     * Parent Tag ID.
+     *
+     * @var mixed
+     */
+    public $parentTagId;
+
+    /**
      * Main tag ID.
      *
      * @var mixed
