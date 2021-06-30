@@ -1,0 +1,12 @@
+<div class="tags-selector-tree" id="tags-selector-tree-{{ field_definition.id }}">
+    <div class="tags-selector-tree-wrapper">
+        <div
+            class="tags-tree"
+            data-path="{{ path('netgen_tags_admin_tree_get_children', {tagId: '_tagId_'}) }}"
+            data-rootTagId="{{ field_definition.validatorConfiguration.TagsValueValidator.subTreeLimit }}"
+            data-showRootTag="true"
+            data-selectedTagPath=""
+            data-disableSubtree=""
+        ></div>
+    </div>
+</div>

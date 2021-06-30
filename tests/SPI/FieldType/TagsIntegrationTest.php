@@ -120,6 +120,7 @@ class TagsIntegrationTest extends BaseIntegrationTest
             [
                 'default' => ['identifier' => 'Default'],
                 'select' => ['identifier' => 'Select'],
+                'tree' => ['identifier' => 'Tree'],
             ]
         );
 

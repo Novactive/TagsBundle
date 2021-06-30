@@ -56,7 +56,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.4.x-dev"
+            "dev-master": "3.4.x-dev",
+	    "dev-release-bo-evols": "3.4.x-dev"
         }
     }
 }

@@ -27,12 +27,20 @@ $.noConflict();
     };
 
     TagsTree.prototype.treeInit = function(){
-        var self = this;
+        var self = this,
+            plugins =  ["sort", "contextmenu", "ui"];
+        if(this.settings.selector){
+            plugins.push('checkbox');
+        }
         this.$tree.jstree({
-            'plugins': ["sort", "contextmenu", "ui"],
+            'plugins': plugins,
+            'checkbox' : {
+                'tie_selection': false,
+                'three_state' : false
+            },
             'contextmenu': {
                 'select_node': false,
-                'items': self.settings.modal ? '' : self.tagTreeContextMenu
+                'items': self.settings.modal || self.settings.selector ? '' : self.tagTreeContextMenu
             },
             'core': {
                 'data': {
@@ -98,9 +106,9 @@ $.noConflict();
                 }
             }
 
-            if (!self.settings.modal) {
+            if (!self.settings.modal && !self.settings.selector) {
                 document.location.href = selectedNode.a_attr.href;
-            } else {
+            } else if(self.settings.modal) {
                 self.$el.find('input.tag-id').val(selectedNode.id);
 
                 if (selectedNode.text === undefined || selectedNode.id == '0') {
@@ -112,6 +120,11 @@ $.noConflict();
                 self.closeModal();
             }
         });
+        if(self.settings.openAll){
+            this.$tree.bind("loaded.jstree", function (event, data) {
+                $(this).jstree("open_all");
+            });
+        }
     }
 
     /** Disables the provided node.
@@ -327,6 +340,10 @@ function ngTagsInit(){
     $('.tags-tabs').tagsTabs();
     $('.tags-modal-tree').tagsTree({'modal': true});
     $('.tags-tree-wrapper').tagsTree();
+    $('.tags-selector-tree-wrapper').tagsTree({
+        'selector': true,
+        'openAll': true
+    });
     $('.tags-sidebar-resizable').tagsResize({connectWith: '.ng-tags-logo'});
 
     /* input enabled/disabled buttons */

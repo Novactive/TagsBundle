@@ -586,6 +586,7 @@ class TagsTest extends FieldTypeTest
             [
                 'default' => ['identifier' => 'Default'],
                 'select' => ['identifier' => 'Select'],
+                'tree' => ['identifier' => 'Tree'],
             ]
         );
 
